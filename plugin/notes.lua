@@ -1,7 +1,19 @@
 local basePath = "~/notes"
 
+local function askForName()
+    vim.fn.inputsave()
+    local name = vim.fn.input("Enter note name: ")
+    vim.fn.inputrestore()
+    return name
+end
+
 local function sNotesNew(name)
-    local nonNullName = name or ""
+    local nonNullName
+    if name == nil or name == "" then
+        nonNullName = askForName()
+    else
+        nonNullName = name
+    end
     local fileName = os.date("%Y-%m-%dT%H-%M-%S") .. nonNullName .. ".md"
     local fullPath = basePath .. "/" .. fileName
     local f = io.open(fullPath, "r")
